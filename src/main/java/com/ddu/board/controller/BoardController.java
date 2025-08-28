@@ -1,5 +1,7 @@
 package com.ddu.board.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
@@ -7,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ddu.board.dao.BoardDao;
+import com.ddu.board.dto.BoardDto;
 
 @Controller
 public class BoardController {
@@ -21,5 +24,22 @@ public class BoardController {
 		
 		
 		return "redirect:boardList";
+	}
+	@RequestMapping(value = "/boardList") // 글쓰기 양식을 출력하는 요청 처피
+	public String boardList(HttpServletRequest request, Model model) {
+		BoardDao boardDao = new BoardDao();
+		List<BoardDto> boardDtos = boardDao.boardList();
+		model.addAttribute("boardDtos",boardDtos);
+		
+		return "boardList";
+	}
+	@RequestMapping(value = "/content_view") // 글쓰기 양식을 출력하는 요청 처피
+	public String content_view(HttpServletRequest request, Model model) {
+		int bnum = Integer.parseInt( request.getParameter("bnum"));
+		BoardDao boardDao = new BoardDao();
+		BoardDto boardDto = boardDao.contentView(bnum);
+		
+		model.addAttribute("boardDto",boardDto);
+		return "contentView";
 	}
 }
